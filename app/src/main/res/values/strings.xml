@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MapsApp</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="titelForLocations">Type in the Latitude and Longtitude of two locations and find out the distance between them</string>
+    <string name="firstPlaceLabel">First Place</string>
+    <string name="hintForCityInput">City, Country</string>
+    <string name="latitudeLabel">Latitude</string>
+    <string name="longitudeLabel">Longitude</string>
+    <string name="emptyString" />
+    <string name="secondPlaceLabel">Second Place</string>
+    <string name="startMapLabel">Start Map</string>
+    <string name="okDialogDistance">OK</string>
+    <string name="wrongNumberFormatForLatLng">Please type valid latitude and longitude values. Example: latitude = 0.0 and longitude = 0.0</string>
+    <string name="dialogMessagePart1">The Distance between </string>
+    <string name="dialogMessageAnd">and</string>
+    <string name="dialogMessageIs">is</string>
+    <string name="showMyLocaitonLabel">My Location</string>
+</resources>

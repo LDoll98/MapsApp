@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MapsApp</string>
     <string name="title_activity_maps">MapsActivity</string>
-    <string name="title_for_locations">Type in the Latitude and Longtitude of two locations and find out the distance between them</string>
+    <string name="title_for_locations">Type in the Latitude and Longitude of two locations and find out the distance between them</string>
     <string name="first_place_label">First Place</string>
     <string name="hint_for_city_input">City, Country</string>
     <string name="latitude_label">Latitude</string>
@@ -23,4 +23,11 @@
     <string name="current_location_longitude_dialog_message">and longitude is</string>
     <string name="no_current_location_found_dialog_label">No current location</string>
     <string name="no_current_location_found_dialog_message">No current location is found. Please check your permissions.</string>
+    <string name="your_location">Your location</string>
+    <string name="choose_distance_dialog_title">Which distance you want to kow?\nChoose distance between</string>
+    <string name="first_and_second_place">First and second place</string>
+    <string name="first_and_my_place">First and my place</string>
+    <string name="second_and_my_place">Second and my place</string>
+    <string name="distance_dialog_title">Distances</string>
+    <string name="show_map_dialog">SHOW MAP</string>
 </resources>

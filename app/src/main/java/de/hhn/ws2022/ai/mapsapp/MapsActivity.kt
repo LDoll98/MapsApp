@@ -108,7 +108,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         task.addOnSuccessListener { location ->
             if (location != null) {
                 currentLocation = location
-                addMarker(mMap, location.latitude, location.longitude, "Your location")
+                addMarker(mMap, location.latitude, location.longitude,
+                    getString(R.string.your_location))
                 locationArray += LatLng(location.latitude, location.longitude)
 
                 Log.d(
@@ -139,10 +140,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showDialogAndMap(locationArray: Array<LatLng>) {
-        createAndShowDialog(
-            "Which distance you want to kow? \n Choose distance between",
-            locationArray
-        )
+        createAndShowDialog(getString(R.string.choose_distance_dialog_title), locationArray)
         zoomToMarker(mMap, locationArray)
     }
 
@@ -159,7 +157,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun createAndShowDialog(title: String, latLngArr: Array<LatLng>) {
         val distanceChoice =
-            arrayOf("First and second place", "First and my place", "Second and my place")
+            arrayOf(getString(R.string.first_and_second_place),
+                getString(R.string.first_and_my_place),
+                getString(R.string.second_and_my_place))
         val selectedItems = mutableListOf(*distanceChoice)
         val distanceCheckedItem = BooleanArray(3)
         distanceCheckedItem[0] = true
@@ -181,9 +181,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             // create dialog
             val distanceDialog = AlertDialog.Builder(this)
-            distanceDialog.setTitle("Distances")
+            distanceDialog.setTitle(getString(R.string.distance_dialog_title))
             distanceDialog.setMessage(dialogStringMessage)
-            distanceDialog.setPositiveButton("SHOW MAP", null)
+            distanceDialog.setPositiveButton(getString(R.string.show_map_dialog), null)
 
             distanceDialog.create().show()
         }
@@ -195,20 +195,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if(latLngArr.size == 3) {
             Log.d(TAG, "3 locations are found")
-            if (map.keys.contains("First and my place") && map.getValue("First and my place")) {
-                addDistanceMessage(message, firstPlaceName, "your location",
+            if (map.keys.contains(getString(R.string.first_and_my_place))
+                && map.getValue(getString(R.string.first_and_my_place))) {
+                addDistanceMessage(message, firstPlaceName, getString(R.string.your_location),
                     latLngArr[0], latLngArr[2])
             }
-            if (map.keys.contains("Second and my place") && map.getValue("Second and my place")) {
-                addDistanceMessage(message, secondPlaceName, "your location",
+            if (map.keys.contains(getString(R.string.second_and_my_place))
+                && map.getValue(getString(R.string.second_and_my_place))) {
+                addDistanceMessage(message, secondPlaceName, getString(R.string.your_location),
                     latLngArr[1], latLngArr[2])
             }
-            if (map.keys.contains("First and second place") && map.getValue("First and second place")) {
+            if (map.keys.contains(getString(R.string.first_and_second_place))
+                && map.getValue(getString(R.string.first_and_second_place))) {
                 addDistanceMessage(message, firstPlaceName, secondPlaceName,
                     latLngArr[0], latLngArr[1])
             }
         } else if (latLngArr.size == 2) {
-            if (map.keys.contains("First and second place") && map.getValue("First and second place")) {
+            if (map.keys.contains(getString(R.string.first_and_second_place))
+                && map.getValue(getString(R.string.first_and_second_place))) {
                 addDistanceMessage(message, firstPlaceName, secondPlaceName,
                     latLngArr[0], latLngArr[1])
             }

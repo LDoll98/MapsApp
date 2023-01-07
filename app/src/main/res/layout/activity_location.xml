@@ -82,7 +82,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/empty_string"
-                android:inputType="textPersonName" />
+                android:inputType="numberSigned|numberDecimal" />
 
             <EditText
                 android:id="@+id/firstPlaceLongitudeEditText"
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="numberSigned|numberDecimal" />
         </LinearLayout>
 
     </LinearLayout>
@@ -157,7 +157,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/empty_string"
-                android:inputType="textPersonName" />
+                android:inputType="numberSigned|numberDecimal" />
 
             <EditText
                 android:id="@+id/secondPlaceLongitudeEditText"
@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="numberSigned|numberDecimal" />
         </LinearLayout>
 
     </LinearLayout>

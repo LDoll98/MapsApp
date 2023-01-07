@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -23,6 +24,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var currentLocation: Location
+    private lateinit var currentLatLng: LatLng
     private val permissionCode = 101
     private lateinit var fusedLocationProvideClient: FusedLocationProviderClient
 
@@ -44,15 +46,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         showMyLocationFlag = intent.getBooleanExtra("showMyLocationFlag", false)
-        if (!showMyLocationFlag) {
-            firstPlaceName = intent.getStringExtra("firstPlaceCity").toString()
-            secondPlaceName = intent.getStringExtra("secondPlaceCity").toString()
 
-            firstPlaceLatitude = intent.getStringExtra("firstPlaceLatitude").toString()
-            firstPlaceLongitude = intent.getStringExtra("firstPlaceLongitude").toString()
-            secondPlaceLatitude = intent.getStringExtra("secondPlaceLatitude").toString()
-            secondPlaceLongitude = intent.getStringExtra("secondPlaceLongitude").toString()
-        }
+        firstPlaceName = intent.getStringExtra("firstPlaceCity").toString()
+        secondPlaceName = intent.getStringExtra("secondPlaceCity").toString()
+
+        firstPlaceLatitude = intent.getStringExtra("firstPlaceLatitude").toString()
+        firstPlaceLongitude = intent.getStringExtra("firstPlaceLongitude").toString()
+        secondPlaceLatitude = intent.getStringExtra("secondPlaceLatitude").toString()
+        secondPlaceLongitude = intent.getStringExtra("secondPlaceLongitude").toString()
+
 
         fusedLocationProvideClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -73,34 +75,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        if (showMyLocationFlag) {
-            fetchAndShowLocation()
-        } else {
-            val firstLocationLatitude = firstPlaceLatitude.toDouble()
-            val firstLocationLongitude = firstPlaceLongitude.toDouble()
-            val secondLocationLatitude = secondPlaceLatitude.toDouble()
-            val secondLocationLongitude = secondPlaceLongitude.toDouble()
+        val firstLocationLatitude = firstPlaceLatitude.toDouble()
+        val firstLocationLongitude = firstPlaceLongitude.toDouble()
+        val secondLocationLatitude = secondPlaceLatitude.toDouble()
+        val secondLocationLongitude = secondPlaceLongitude.toDouble()
 
-            addMarker(mMap, firstLocationLatitude, firstLocationLongitude, firstPlaceName)
-            addMarker(mMap, secondLocationLatitude, secondLocationLongitude, secondPlaceName)
+        addMarker(mMap, firstLocationLatitude, firstLocationLongitude, firstPlaceName)
+        addMarker(mMap, secondLocationLatitude, secondLocationLongitude, secondPlaceName)
 
-            val latLngFirstLocation = LatLng(firstLocationLatitude, firstLocationLongitude)
-            val latLngSecondLocation = LatLng(secondLocationLatitude, secondLocationLongitude)
+        val latLngFirstLocation = LatLng(firstLocationLatitude, firstLocationLongitude)
+        val latLngSecondLocation = LatLng(secondLocationLatitude, secondLocationLongitude)
+        fetchLocationAndShowDistanceDialog(latLngFirstLocation, latLngSecondLocation)
 
-            val distance =
-                MapUtil.calculateDistance(
-                    latLngFirstLocation, latLngSecondLocation,
-                    firstPlaceName, secondPlaceName
-                )
-
-            zoomToMarker(mMap, arrayOf(latLngFirstLocation, latLngSecondLocation))
-
-            createAndShowDialog(getString(R.string.distance_dialog_label), buildMessage(distance))
-        }
     }
 
 
-    private fun fetchAndShowLocation() {
+    private fun fetchLocationAndShowDistanceDialog(firstLatLng: LatLng, secondLatLng: LatLng) {
+        var locationArray = arrayOf(firstLatLng, secondLatLng)
+
         if (!checkLocationPermission()) {
             Log.d(TAG, "Permissions for location are denied")
             ActivityCompat.requestPermissions(
@@ -108,66 +100,150 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode
             )
 
-            createAndShowDialog(
-                getString(R.string.no_permission_for_location_dialog_label),
-                getString(R.string.no_permission_for_location_dialog_message)
-            )
-            return
+            Toast.makeText(
+                this,
+                getString(R.string.no_permission_for_location_dialog_message),
+                Toast.LENGTH_LONG
+            ).show()
         }
         mMap.isMyLocationEnabled = true
         val task = fusedLocationProvideClient.lastLocation
         task.addOnSuccessListener { location ->
             if (location != null) {
+                currentLocation = location
                 Log.d(
                     TAG, "Current location: Latitude = ${currentLocation.latitude}, " +
                             "Longitude = ${currentLocation.longitude}"
                 )
-
-                currentLocation = location
                 val currentLatLng = LatLng(location.latitude, location.longitude)
+                locationArray += currentLatLng
                 mMap.addMarker(MarkerOptions().position(currentLatLng).title("$currentLatLng"))
 
-                zoomToMarker(mMap, arrayOf(currentLatLng))
+                val message = getString(R.string.current_location_latitude_dialog_message) +
+                        "${currentLocation.latitude}" +
+                        getString(R.string.current_location_longitude_dialog_message) +
+                        "${currentLocation.longitude}"
 
-                createAndShowDialog(getString(R.string.current_location_dialog_label),
-                    getString(R.string.current_location_latitude_dialog_message) +
-                            "${currentLocation.latitude}" +
-                            getString(R.string.current_location_longitude_dialog_message) +
-                            "${currentLocation.longitude}"
+                val toast = Toast.makeText(this, message, Toast.LENGTH_LONG)
+                toast.show()
+
+                createAndShowDialog(
+                    "Which distance you want to kow? \n Choose distance between",
+                    locationArray
                 )
+                zoomToMarker(mMap, locationArray)
             } else {
                 Log.d(TAG, "No current location found!")
 
-                createAndShowDialog(
-                    getString(R.string.no_current_location_found_dialog_label),
-                    getString(R.string.no_current_location_found_dialog_message)
-                )
+                Toast.makeText(
+                    this,
+                    getString(R.string.no_current_location_found_dialog_message),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
     private fun checkLocationPermission(): Boolean {
-        return (ActivityCompat.checkSelfPermission(this,
-            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this,
-            Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        return (ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED)
     }
 
-    private fun createAndShowDialog(title: String, message: String) {
+    private fun createAndShowDialog(title: String, latLngArr: Array<LatLng>) {
+        val distanceChoice =
+            arrayOf("First and second place", "First and my place", "Second and my place")
+        val selectedItems = mutableListOf(*distanceChoice)
+        val distanceCheckedItem = BooleanArray(3)
+        distanceCheckedItem[0] = true
+        distanceCheckedItem[1] = false
+        distanceCheckedItem[2] = false
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
-        builder.setMessage(message)
-        builder.setPositiveButton("OK", null)
+        var map = mutableMapOf<String, Boolean>(
+            distanceChoice[0] to distanceCheckedItem[0],
+            distanceChoice[1] to distanceCheckedItem[1],
+            distanceChoice[2] to distanceCheckedItem[2]
+        )
+        builder.setMultiChoiceItems(distanceChoice, distanceCheckedItem) { _, which, isChecked ->
+            map[distanceChoice[which]] = isChecked
+        }
+
+        var dialogStringMessage = ""
+        builder.setPositiveButton("OK") { _, _ ->
+            dialogStringMessage = createStringMessage(map, latLngArr)
+
+            // create dialog
+            val distanceDialog = AlertDialog.Builder(this)
+            distanceDialog.setTitle("Distances")
+            distanceDialog.setMessage(dialogStringMessage)
+            distanceDialog.setPositiveButton("SHOW MAP", null)
+
+            distanceDialog.create().show()
+        }
 
         builder.create().show()
     }
 
-    private fun buildMessage(distance: Float): String {
+    private fun createStringMessage(map: MutableMap<String, Boolean>, latLngArr: Array<LatLng>): String {
+        var message = StringBuilder()
+
+        if(latLngArr.size == 3) {
+            Log.d(TAG, "3 locations are found")
+            if (map.keys.contains("First and my place") && map.getValue("First and my place")) {
+                val distanceFirstSecondPlace = MapUtil.calculateDistance(
+                    latLngArr[0], latLngArr[2], firstPlaceName, "your location"
+                )
+                message.append(
+                    buildMessage(distanceFirstSecondPlace, firstPlaceName, "your location")
+                ).append("\n")
+                Log.d(TAG, "Distance from First to my place = $distanceFirstSecondPlace")
+            }
+            if (map.keys.contains("Second and my place") && map.getValue("Second and my place")) {
+                val distanceFirstSecondPlace = MapUtil.calculateDistance(
+                    latLngArr[1], latLngArr[2], secondPlaceName, latLngArr[0].toString()
+                )
+                message.append(
+                    buildMessage(distanceFirstSecondPlace, secondPlaceName, "your location")
+                ).append("\n")
+                Log.d(TAG, "Distance from second to my place = $distanceFirstSecondPlace")
+            }
+            if (map.keys.contains("First and second place") && map.getValue("First and second place")) {
+                val distanceFirstSecondPlace = MapUtil.calculateDistance(
+                    latLngArr[0], latLngArr[1], secondPlaceName, latLngArr[0].toString()
+                )
+                message.append(
+                    buildMessage(distanceFirstSecondPlace, firstPlaceName, secondPlaceName)
+                ).append("\n")
+                Log.d(TAG, "Distance from First to second place = $distanceFirstSecondPlace")
+            }
+        } else if (latLngArr.size == 2) {
+            if (map.keys.contains("First and second place") && map.getValue("First and second place")) {
+                val distanceFirstSecondPlace = MapUtil.calculateDistance(
+                    latLngArr[0], latLngArr[1], secondPlaceName, latLngArr[0].toString()
+                )
+                message.append(
+                    buildMessage(distanceFirstSecondPlace, firstPlaceName, secondPlaceName)
+                ).append("\n")
+                Log.d(TAG, "Array size = 2; Distance from First to second place = $distanceFirstSecondPlace")
+            }
+            // make toast that current location not found
+        }
+        return message.toString()
+    }
+
+    private fun buildMessage(distance: Float, firstDistancePlace: String, secondDistancePlace: String): String {
         return buildString {
             append(getString(R.string.dialog_message_part_1)).append(" ")
-                .append(firstPlaceName).append(" ")
+                .append(firstDistancePlace).append(" ")
                 .append(getString(R.string.dialog_message_and)).append(" ")
-                .append(secondPlaceName).append(" ")
+                .append(secondDistancePlace).append(" ")
                 .append(getString(R.string.dialog_message_is)).append(" ")
                 .append(distance.toString())
                 .append(" km")

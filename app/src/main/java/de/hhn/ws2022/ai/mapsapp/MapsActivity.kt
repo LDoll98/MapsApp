@@ -115,9 +115,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     TAG, "Current location: Latitude = ${currentLocation.latitude}, " +
                             "Longitude = ${currentLocation.longitude}"
                 )
-                val currentLatLng = LatLng(location.latitude, location.longitude)
-                locationArray += currentLatLng
-                mMap.addMarker(MarkerOptions().position(currentLatLng).title("$currentLatLng"))
+                addMarker(mMap, location.latitude, location.longitude, "$currentLatLng")
+                locationArray += LatLng(location.latitude, location.longitude)
 
                 val message = getString(R.string.current_location_latitude_dialog_message) +
                         "${currentLocation.latitude}" +
@@ -192,50 +191,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun createStringMessage(map: MutableMap<String, Boolean>, latLngArr: Array<LatLng>): String {
-        var message = StringBuilder()
+        val message = StringBuilder()
 
         if(latLngArr.size == 3) {
             Log.d(TAG, "3 locations are found")
             if (map.keys.contains("First and my place") && map.getValue("First and my place")) {
-                val distanceFirstSecondPlace = MapUtil.calculateDistance(
-                    latLngArr[0], latLngArr[2], firstPlaceName, "your location"
-                )
-                message.append(
-                    buildMessage(distanceFirstSecondPlace, firstPlaceName, "your location")
-                ).append("\n")
-                Log.d(TAG, "Distance from First to my place = $distanceFirstSecondPlace")
+                addDistanceMessage(message, firstPlaceName, "your location",
+                    latLngArr[0], latLngArr[2])
             }
             if (map.keys.contains("Second and my place") && map.getValue("Second and my place")) {
-                val distanceFirstSecondPlace = MapUtil.calculateDistance(
-                    latLngArr[1], latLngArr[2], secondPlaceName, latLngArr[0].toString()
-                )
-                message.append(
-                    buildMessage(distanceFirstSecondPlace, secondPlaceName, "your location")
-                ).append("\n")
-                Log.d(TAG, "Distance from second to my place = $distanceFirstSecondPlace")
+                addDistanceMessage(message, secondPlaceName, "your location",
+                    latLngArr[1], latLngArr[2])
             }
             if (map.keys.contains("First and second place") && map.getValue("First and second place")) {
-                val distanceFirstSecondPlace = MapUtil.calculateDistance(
-                    latLngArr[0], latLngArr[1], secondPlaceName, latLngArr[0].toString()
-                )
-                message.append(
-                    buildMessage(distanceFirstSecondPlace, firstPlaceName, secondPlaceName)
-                ).append("\n")
-                Log.d(TAG, "Distance from First to second place = $distanceFirstSecondPlace")
+                addDistanceMessage(message, secondPlaceName, secondPlaceName,
+                    latLngArr[0], latLngArr[1])
             }
         } else if (latLngArr.size == 2) {
             if (map.keys.contains("First and second place") && map.getValue("First and second place")) {
-                val distanceFirstSecondPlace = MapUtil.calculateDistance(
-                    latLngArr[0], latLngArr[1], secondPlaceName, latLngArr[0].toString()
-                )
-                message.append(
-                    buildMessage(distanceFirstSecondPlace, firstPlaceName, secondPlaceName)
-                ).append("\n")
-                Log.d(TAG, "Array size = 2; Distance from First to second place = $distanceFirstSecondPlace")
+                addDistanceMessage(message, secondPlaceName, secondPlaceName,
+                    latLngArr[0], latLngArr[1])
             }
             // make toast that current location not found
         }
         return message.toString()
+    }
+
+    private fun addDistanceMessage(
+        message: StringBuilder,
+        firstPlaceString: String, secondPlaceString: String,
+        firstPlaceLatLng: LatLng, secondPlaceLatLng: LatLng
+    ) {
+        val distanceFirstSecondPlace = MapUtil.calculateDistance(
+            firstPlaceLatLng,secondPlaceLatLng, firstPlaceString, secondPlaceString
+        )
+        message.append(
+            buildMessage(distanceFirstSecondPlace, firstPlaceString, secondPlaceString)
+        ).append("\n")
+        Log.d(TAG, "Distance from First to my place = $distanceFirstSecondPlace")
     }
 
     private fun buildMessage(distance: Float, firstDistancePlace: String, secondDistancePlace: String): String {

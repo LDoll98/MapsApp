@@ -1,18 +1,26 @@
 <resources>
     <string name="app_name">MapsApp</string>
     <string name="title_activity_maps">MapsActivity</string>
-    <string name="titelForLocations">Type in the Latitude and Longtitude of two locations and find out the distance between them</string>
-    <string name="firstPlaceLabel">First Place</string>
-    <string name="hintForCityInput">City, Country</string>
-    <string name="latitudeLabel">Latitude</string>
-    <string name="longitudeLabel">Longitude</string>
-    <string name="emptyString" />
-    <string name="secondPlaceLabel">Second Place</string>
-    <string name="startMapLabel">Start Map</string>
-    <string name="okDialogDistance">OK</string>
-    <string name="wrongNumberFormatForLatLng">Please type valid latitude and longitude values. Example: latitude = 0.0 and longitude = 0.0</string>
-    <string name="dialogMessagePart1">The Distance between </string>
-    <string name="dialogMessageAnd">and</string>
-    <string name="dialogMessageIs">is</string>
-    <string name="showMyLocaitonLabel">My Location</string>
+    <string name="title_for_locations">Type in the Latitude and Longtitude of two locations and find out the distance between them</string>
+    <string name="first_place_label">First Place</string>
+    <string name="hint_for_city_input">City, Country</string>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="empty_string" />
+    <string name="second_place_label">Second Place</string>
+    <string name="start_map_label">Start Map</string>
+    <string name="ok_dialog_distance">OK</string>
+    <string name="wrong_number_format_for_lat_lng">Please type valid latitude and longitude values. Example: latitude = 0.0 and longitude = 0.0</string>
+    <string name="dialog_message_part_1">The Distance between </string>
+    <string name="dialog_message_and">and</string>
+    <string name="dialog_message_is">is</string>
+    <string name="show_my_location_label">My Location</string>
+    <string name="distance_dialog_label">Distance</string>
+    <string name="no_permission_for_location_dialog_label">No permissions</string>
+    <string name="no_permission_for_location_dialog_message">Permissions for location are denied but permission is needed for this action</string>
+    <string name="current_location_dialog_label">Current location</string>
+    <string name="current_location_latitude_dialog_message">Your current location latitude is</string>
+    <string name="current_location_longitude_dialog_message">and longitude is</string>
+    <string name="no_current_location_found_dialog_label">No current location</string>
+    <string name="no_current_location_found_dialog_message">No current location is found. Please check your permissions.</string>
 </resources>

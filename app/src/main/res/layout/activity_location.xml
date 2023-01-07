@@ -16,7 +16,7 @@
         android:background="#3700BCD4"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/titelForLocations"
+        android:text="@string/title_for_locations"
         android:textAlignment="center"
         android:textSize="24sp" />
 
@@ -34,14 +34,14 @@
             android:id="@+id/firstPlaceLabelTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/firstPlaceLabel" />
+            android:text="@string/first_place_label" />
 
         <EditText
             android:id="@+id/firstPlaceEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/hintForCityInput"
+            android:hint="@string/hint_for_city_input"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -58,14 +58,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="start"
-                android:text="@string/latitudeLabel" />
+                android:text="@string/latitude_label" />
 
             <TextView
                 android:id="@+id/firstPlaceLongitudeLabelTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/longitudeLabel" />
+                android:text="@string/longitude_label" />
 
         </LinearLayout>
 
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="@string/emptyString"
+                android:hint="@string/empty_string"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -109,14 +109,14 @@
             android:id="@+id/secondPlaceLabelTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/secondPlaceLabel" />
+            android:text="@string/second_place_label" />
 
         <EditText
             android:id="@+id/secondPlaceEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/hintForCityInput"
+            android:hint="@string/hint_for_city_input"
             android:inputType="textPersonName"
             android:minHeight="48dp" />
 
@@ -133,14 +133,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="start"
-                android:text="@string/latitudeLabel" />
+                android:text="@string/latitude_label" />
 
             <TextView
                 android:id="@+id/secondPlaceLongitudeLabelTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/longitudeLabel" />
+                android:text="@string/longitude_label" />
 
         </LinearLayout>
 
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="@string/emptyString"
+                android:hint="@string/empty_string"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -183,7 +183,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="@string/startMapLabel" />
+            android:text="@string/start_map_label" />
 
         <Button
             android:id="@+id/showMyLocationButton"
@@ -191,7 +191,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="@string/showMyLocaitonLabel" />
+            android:text="@string/show_my_location_label" />
     </LinearLayout>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

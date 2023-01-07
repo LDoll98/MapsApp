@@ -1,13 +1,11 @@
 package de.hhn.ws2022.ai.mapsapp
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 
 class LocationActivity : AppCompatActivity(), View.OnClickListener {
@@ -17,8 +15,12 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var secondPlaceCity: EditText
     private lateinit var secondPlaceLatitude: EditText
     private lateinit var secondPlaceLongitude: EditText
+
     private lateinit var startMapButton: Button
     private lateinit var showMyLocationButton: Button
+
+    private val permissionCode = 101
+    private var permissionWasDenied = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +35,12 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener {
 
         startMapButton = findViewById(R.id.startMapButton)
         showMyLocationButton = findViewById(R.id.showMyLocationButton)
+
+        permissionWasDenied = intent.getBooleanExtra("permissionWasDenied", false)
     }
 
     override fun onResume() {
         super.onResume()
-
-        // Use cases
-        // input fields are empty -> Toast: Please type in latitude and longitude for first and second place when using start map button
-        // comma separated digits -> Toast: Please separate with dot
-        // check if lat/lng is land
-        //
 
         // Add On
         // Add more than two places -> distance have to be chooseable
@@ -50,7 +48,6 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener {
         // Go back from MapsActivity to LocationActivity
         // Show distance in MapsActivity after dialog
         // Provide a list with famous places by name
-
 
         var showMyLocationFlag = false
         showMyLocationButton.setOnClickListener {
@@ -76,7 +73,8 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener {
                 MapUtil.checkIfLatLongValid(secondPlaceLatString, secondPlaceLngString)
 
 
-            if(firstPlaceLatLngIsValid && secondPlaceLatLngIsValid) {
+            if (firstPlaceLatLngIsValid && secondPlaceLatLngIsValid) {
+
                 val intent = Intent(this, MapsActivity::class.java).apply {
                     putExtra("showMyLocationFlag", showMyLocationFlag)
                     putExtra("firstPlaceCity", firstPlaceCityString)
@@ -95,14 +93,6 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener {
                 builder.setMessage("Please type in valid digits.\nLatitude between -90.0 and 90.00\nLongitude between -180.0 and 180.0")
                 builder.setPositiveButton("OK", null)
                 builder.show()
-
-                // Toast
-                /*
-                val message = R.string.wrongNumberFormatForLatLng
-                val toast = Toast.makeText(applicationContext, "Please type in valid digits. Latitude between -90.0 and 90.00; Longitude between -180.0 and 180.0.", Toast.LENGTH_LONG)
-                toast.show()
-
-                 */
             }
         }
     }

@@ -74,10 +74,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         if (showMyLocationFlag) {
-            // show current location
-            fetchLocation()
+            fetchAndShowLocation()
         } else {
-            // Add marker
             val firstLocationLatitude = firstPlaceLatitude.toDouble()
             val firstLocationLongitude = firstPlaceLongitude.toDouble()
             val secondLocationLatitude = secondPlaceLatitude.toDouble()
@@ -86,70 +84,91 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             addMarker(mMap, firstLocationLatitude, firstLocationLongitude, firstPlaceName)
             addMarker(mMap, secondLocationLatitude, secondLocationLongitude, secondPlaceName)
 
-            // Calculate distance
             val latLngFirstLocation = LatLng(firstLocationLatitude, firstLocationLongitude)
             val latLngSecondLocation = LatLng(secondLocationLatitude, secondLocationLongitude)
 
             val distance =
-                MapUtil.calculateDistance(latLngFirstLocation, latLngSecondLocation,
-                    firstPlaceName, secondPlaceName)
+                MapUtil.calculateDistance(
+                    latLngFirstLocation, latLngSecondLocation,
+                    firstPlaceName, secondPlaceName
+                )
 
-            // Zoom to BOTH Marker
             zoomToMarker(mMap, arrayOf(latLngFirstLocation, latLngSecondLocation))
 
-            // Show dialog with distance
-            showDistanceDialog(distance)
+            createAndShowDialog(getString(R.string.distance_dialog_label), buildMessage(distance))
         }
     }
 
 
-    private fun fetchLocation() {
-        if (checkLocationPermission()) {
+    private fun fetchAndShowLocation() {
+        if (!checkLocationPermission()) {
             Log.d(TAG, "Permissions for location are denied")
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode)
-            // fetchLocation()
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode
+            )
+
+            createAndShowDialog(
+                getString(R.string.no_permission_for_location_dialog_label),
+                getString(R.string.no_permission_for_location_dialog_message)
+            )
             return
         }
+        mMap.isMyLocationEnabled = true
         val task = fusedLocationProvideClient.lastLocation
-        task.addOnSuccessListener {
-            location ->
-            if(location != null) {
-                Log.d(TAG, "Current location: Latitude = ${currentLocation.latitude}, " +
-                            "Longitude = ${currentLocation.longitude}")
+        task.addOnSuccessListener { location ->
+            if (location != null) {
+                Log.d(
+                    TAG, "Current location: Latitude = ${currentLocation.latitude}, " +
+                            "Longitude = ${currentLocation.longitude}"
+                )
+
                 currentLocation = location
                 val currentLatLng = LatLng(location.latitude, location.longitude)
                 mMap.addMarker(MarkerOptions().position(currentLatLng).title("$currentLatLng"))
 
                 zoomToMarker(mMap, arrayOf(currentLatLng))
+
+                createAndShowDialog(getString(R.string.current_location_dialog_label),
+                    getString(R.string.current_location_latitude_dialog_message) +
+                            "${currentLocation.latitude}" +
+                            getString(R.string.current_location_longitude_dialog_message) +
+                            "${currentLocation.longitude}"
+                )
             } else {
                 Log.d(TAG, "No current location found!")
+
+                createAndShowDialog(
+                    getString(R.string.no_current_location_found_dialog_label),
+                    getString(R.string.no_current_location_found_dialog_message)
+                )
             }
         }
     }
 
     private fun checkLocationPermission(): Boolean {
-        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED)
+        return (ActivityCompat.checkSelfPermission(this,
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+            Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
     }
 
-    private fun showDistanceDialog(distance: Float) {
+    private fun createAndShowDialog(title: String, message: String) {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Distance")
-        builder.setMessage(buildMessage(distance))
+        builder.setTitle(title)
+        builder.setMessage(message)
         builder.setPositiveButton("OK", null)
 
-        builder.show()
+        builder.create().show()
     }
 
     private fun buildMessage(distance: Float): String {
-        return buildString { append(getString(R.string.dialogMessagePart1)).append(" ")
+        return buildString {
+            append(getString(R.string.dialog_message_part_1)).append(" ")
                 .append(firstPlaceName).append(" ")
-                .append(getString(R.string.dialogMessageAnd)).append(" ")
+                .append(getString(R.string.dialog_message_and)).append(" ")
                 .append(secondPlaceName).append(" ")
-                .append(getString(R.string.dialogMessageIs)).append(" ")
+                .append(getString(R.string.dialog_message_is)).append(" ")
                 .append(distance.toString())
                 .append(" km")
         }
@@ -176,37 +195,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .width(2.0F)
             .color(Color.BLACK)
             .pattern(pattern)
-        for(location in locations) {
+        for (location in locations) {
             polyOptions.add(location)
         }
 
         mMap.addPolyline(polyOptions)
     }
-
-    /*
-    private fun zoomToMarker(mMap: GoogleMap, latLngFirstLocation: LatLng, latLngSecondLocation: LatLng, locations: Array<LatLng>) {
-        val zoomBuilder = LatLngBounds.Builder()
-        zoomBuilder.include(latLngFirstLocation)
-        zoomBuilder.include(latLngSecondLocation)
-
-        val bounds = zoomBuilder.build()
-        val padding = 150 // offset from edges of the map in pixels
-        val zoom = CameraUpdateFactory.newLatLngBounds(bounds, padding)
-
-        val pattern = listOf(
-            Dot(), Gap(10F), Dash(20F), Gap(10F)
-        )
-        val line = mMap.addPolyline(PolylineOptions()
-            .add(latLngFirstLocation)
-            .add(latLngSecondLocation)
-            .width(2.0F)
-            .color(Color.BLACK)
-            .pattern(pattern))
-
-        mMap.animateCamera(zoom)
-    }
-
-     */
 
     private fun addMarker(mMap: GoogleMap, lat: Double, lng: Double, name: String) {
         val location = LatLng(lat, lng)

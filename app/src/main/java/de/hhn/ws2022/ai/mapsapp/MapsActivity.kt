@@ -99,48 +99,51 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode
             )
-
-            Toast.makeText(
-                this,
-                getString(R.string.no_permission_for_location_dialog_message),
-                Toast.LENGTH_LONG
-            ).show()
+            showDialogAndToastForLocations(locationArray,
+                getString(R.string.no_permission_for_location_dialog_message))
+            return
         }
         mMap.isMyLocationEnabled = true
         val task = fusedLocationProvideClient.lastLocation
         task.addOnSuccessListener { location ->
             if (location != null) {
                 currentLocation = location
+                addMarker(mMap, location.latitude, location.longitude, "Your location")
+                locationArray += LatLng(location.latitude, location.longitude)
+
                 Log.d(
                     TAG, "Current location: Latitude = ${currentLocation.latitude}, " +
                             "Longitude = ${currentLocation.longitude}"
                 )
-                addMarker(mMap, location.latitude, location.longitude, "$currentLatLng")
-                locationArray += LatLng(location.latitude, location.longitude)
-
                 val message = getString(R.string.current_location_latitude_dialog_message) +
                         "${currentLocation.latitude}" +
                         getString(R.string.current_location_longitude_dialog_message) +
                         "${currentLocation.longitude}"
-
-                val toast = Toast.makeText(this, message, Toast.LENGTH_LONG)
-                toast.show()
-
-                createAndShowDialog(
-                    "Which distance you want to kow? \n Choose distance between",
-                    locationArray
-                )
-                zoomToMarker(mMap, locationArray)
+                showDialogAndToastForLocations(locationArray, message)
             } else {
                 Log.d(TAG, "No current location found!")
+                showDialogAndToastForLocations(locationArray,
+                    getString(R.string.no_current_location_found_dialog_message))
 
-                Toast.makeText(
-                    this,
-                    getString(R.string.no_current_location_found_dialog_message),
-                    Toast.LENGTH_LONG
-                ).show()
             }
         }
+    }
+
+    private fun showDialogAndToastForLocations(locationArray: Array<LatLng>, message: String) {
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_LONG
+        ).show()
+        showDialogAndMap(locationArray)
+    }
+
+    private fun showDialogAndMap(locationArray: Array<LatLng>) {
+        createAndShowDialog(
+            "Which distance you want to kow? \n Choose distance between",
+            locationArray
+        )
+        zoomToMarker(mMap, locationArray)
     }
 
     private fun checkLocationPermission(): Boolean {
@@ -162,21 +165,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         distanceCheckedItem[0] = true
         distanceCheckedItem[1] = false
         distanceCheckedItem[2] = false
-
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(title)
         var map = mutableMapOf<String, Boolean>(
             distanceChoice[0] to distanceCheckedItem[0],
             distanceChoice[1] to distanceCheckedItem[1],
             distanceChoice[2] to distanceCheckedItem[2]
         )
+
+        builder.setTitle(title)
         builder.setMultiChoiceItems(distanceChoice, distanceCheckedItem) { _, which, isChecked ->
             map[distanceChoice[which]] = isChecked
         }
-
-        var dialogStringMessage = ""
         builder.setPositiveButton("OK") { _, _ ->
-            dialogStringMessage = createStringMessage(map, latLngArr)
+            val dialogStringMessage = createStringMessage(map, latLngArr)
 
             // create dialog
             val distanceDialog = AlertDialog.Builder(this)
@@ -186,7 +187,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             distanceDialog.create().show()
         }
-
         builder.create().show()
     }
 
@@ -204,12 +204,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     latLngArr[1], latLngArr[2])
             }
             if (map.keys.contains("First and second place") && map.getValue("First and second place")) {
-                addDistanceMessage(message, secondPlaceName, secondPlaceName,
+                addDistanceMessage(message, firstPlaceName, secondPlaceName,
                     latLngArr[0], latLngArr[1])
             }
         } else if (latLngArr.size == 2) {
             if (map.keys.contains("First and second place") && map.getValue("First and second place")) {
-                addDistanceMessage(message, secondPlaceName, secondPlaceName,
+                addDistanceMessage(message, firstPlaceName, secondPlaceName,
                     latLngArr[0], latLngArr[1])
             }
             // make toast that current location not found

@@ -24,7 +24,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var currentLocation: Location
-    private lateinit var currentLatLng: LatLng
     private val permissionCode = 101
     private lateinit var fusedLocationProvideClient: FusedLocationProviderClient
 
@@ -160,13 +159,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             arrayOf(getString(R.string.first_and_second_place),
                 getString(R.string.first_and_my_place),
                 getString(R.string.second_and_my_place))
-        val selectedItems = mutableListOf(*distanceChoice)
         val distanceCheckedItem = BooleanArray(3)
         distanceCheckedItem[0] = true
         distanceCheckedItem[1] = false
         distanceCheckedItem[2] = false
         val builder = AlertDialog.Builder(this)
-        var map = mutableMapOf<String, Boolean>(
+        val map = mutableMapOf<String, Boolean>(
             distanceChoice[0] to distanceCheckedItem[0],
             distanceChoice[1] to distanceCheckedItem[1],
             distanceChoice[2] to distanceCheckedItem[2]

@@ -20,7 +20,6 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var startMapButton: Button
 
     private lateinit var spinner: Spinner
-    private var permissionWasDenied = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +34,6 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
 
         startMapButton = findViewById(R.id.startMapButton)
 
-        permissionWasDenied = intent.getBooleanExtra("permissionWasDenied", false)
 
         spinner = findViewById(R.id.spinner)
         spinner.onItemSelectedListener = this
@@ -48,8 +46,6 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onResume() {
         super.onResume()
-
-        val showMyLocationFlag = false
 
         startMapButton.setOnClickListener {
             val firstPlaceCityString = firstPlaceCity.text.toString()
@@ -69,7 +65,6 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
             if (firstPlaceLatLngIsValid && secondPlaceLatLngIsValid) {
 
                 val intent = Intent(this, MapsActivity::class.java).apply {
-                    putExtra("showMyLocationFlag", showMyLocationFlag)
                     putExtra("firstPlaceCity", firstPlaceCityString)
                     putExtra("secondPlaceCity", secondPlaceCityString)
 
@@ -95,10 +90,14 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
         Log.d("LocationActivity", " Selected item: ${p0!!.adapter.getItem(p2)}")
         val cityNames = resources.getStringArray(R.array.city_names)
         when (p0.adapter.getItem(p2)) {
-            cityNames[2] -> fillInPlace(cityNames[2], "40.730610", "-73.935242")
-            cityNames[4] -> fillInPlace(cityNames[4], "-33.865143", "151.209900")
-            cityNames[3] -> fillInPlace(cityNames[3], "51.509865", "-0.118092")
             cityNames[1] -> clearInputFields()
+            cityNames[2] -> fillInPlace(cityNames[2], "40.730610", "-73.935242")
+            cityNames[3] -> fillInPlace(cityNames[3], "51.509865", "-0.118092")
+            cityNames[4] -> fillInPlace(cityNames[4], "-33.865143", "151.209900")
+            cityNames[5] -> fillInPlace(cityNames[5], "52.5167", "13.3833")
+            cityNames[6] -> fillInPlace(cityNames[6], "55.751244", "37.618423")
+            cityNames[7] -> fillInPlace(cityNames[7], "31.1667", "121.469170")
+            cityNames[8] -> fillInPlace(cityNames[8], "35.6897", "139.6922")
         }
     }
 

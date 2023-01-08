@@ -6,6 +6,10 @@
         <item>New York</item>
         <item>London</item>
         <item>Sydney</item>
+        <item>Berlin</item>
+        <item>Moscow</item>
+        <item>Shanghai</item>
+        <item>Tokyo</item>
     </string-array>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_for_locations">Type in the Latitude and Longitude of two locations and find out the distance between them</string>

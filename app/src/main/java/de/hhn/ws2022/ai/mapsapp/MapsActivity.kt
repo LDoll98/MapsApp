@@ -18,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import de.hhn.ws2022.ai.mapsapp.databinding.ActivityMapsBinding
+import java.text.NumberFormat
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -110,15 +111,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 addMarker(mMap, location.latitude, location.longitude,
                     getString(R.string.your_location))
                 locationArray += LatLng(location.latitude, location.longitude)
-
                 Log.d(
                     tag, "Current location: Latitude = ${currentLocation.latitude}, " +
                             "Longitude = ${currentLocation.longitude}"
                 )
+
+                val numberFormat: NumberFormat = NumberFormat.getInstance()
+                numberFormat.maximumFractionDigits = 3
+                val latitudeString = numberFormat.format(location.latitude)
+                val longitudeString = numberFormat.format(location.longitude)
+
                 val message = getString(R.string.current_location_latitude_dialog_message) +
-                        "${currentLocation.latitude}" +
+                        " " + latitudeString + " " +
                         getString(R.string.current_location_longitude_dialog_message) +
-                        "${currentLocation.longitude}"
+                        " " + longitudeString + " "
                 showDialogAndToastForLocations(locationArray, message)
             } else {
                 Log.d(tag, "No current location found!")

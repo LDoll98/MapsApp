@@ -80,10 +80,9 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
                 }
                 startActivity(intent)
             } else {
-                // AlertDialog
                 val builder = AlertDialog.Builder(this)
-                builder.setTitle("Wrong input")
-                builder.setMessage("Please type in valid digits.\nLatitude between -90.0 and 90.00\nLongitude between -180.0 and 180.0")
+                builder.setTitle(getString(R.string.dialog_wrong_input_label))
+                builder.setMessage(getString(R.string.dialog_wrong_input))
                 builder.setPositiveButton("OK", null)
                 builder.show()
             }
@@ -94,11 +93,12 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         Log.d("LocationActivity", " Selected item: ${p0!!.adapter.getItem(p2)}")
+        val cityNames = resources.getStringArray(R.array.city_names)
         when (p0.adapter.getItem(p2)) {
-            "New York" -> fillInPlace("New York", "40.730610", "-73.935242")
-            "Sydney" -> fillInPlace("Sydney", "-33.865143", "151.209900")
-            "London" -> fillInPlace("London", "51.509865", "-0.118092")
-            "Clear" -> clearInputFields()
+            cityNames[2] -> fillInPlace(cityNames[2], "40.730610", "-73.935242")
+            cityNames[4] -> fillInPlace(cityNames[4], "-33.865143", "151.209900")
+            cityNames[3] -> fillInPlace(cityNames[3], "51.509865", "-0.118092")
+            cityNames[1] -> clearInputFields()
         }
     }
 
@@ -121,7 +121,7 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
                 firstPlaceLongitude.setText(longitude)
             } else {
                 Toast.makeText(
-                    this, "You have that city already place pick another one", Toast.LENGTH_LONG).show()
+                    this, getString(R.string.toast_same_input), Toast.LENGTH_LONG).show()
             }
         }
         else if (secondPlaceCity.text.isEmpty() && secondPlaceLatitude.text.isEmpty()
@@ -132,11 +132,11 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
                 secondPlaceLongitude.setText(longitude)
             } else {
                 Toast.makeText(
-                    this, "You have that city already place pick another one", Toast.LENGTH_LONG).show()
+                    this, getString(R.string.toast_same_input), Toast.LENGTH_LONG).show()
             }
         } else {
             Toast.makeText(
-                this, "There is no free input field", Toast.LENGTH_LONG).show()
+                this, getString(R.string.toast_no_free_input), Toast.LENGTH_LONG).show()
         }
     }
 

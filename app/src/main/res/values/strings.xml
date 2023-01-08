@@ -37,4 +37,8 @@
     <string name="second_and_my_place">Second and my place</string>
     <string name="distance_dialog_title">Distances</string>
     <string name="show_map_dialog">SHOW MAP</string>
+    <string name="toast_same_input">You have that city already place pick another one</string>
+    <string name="toast_no_free_input">There is no free input field</string>
+    <string name="dialog_wrong_input">Please type in valid digits.\nLatitude between -90.0 and 90.00.\nLongitude between -180.0 and 180.0</string>
+    <string name="dialog_wrong_input_label">Wrong input</string>
 </resources>

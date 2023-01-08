@@ -36,7 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var secondPlaceLatitude: String
     private lateinit var secondPlaceLongitude: String
 
-    private var TAG = "MapsActivity Location Permission"
+    private val tag = MapsActivity::class.qualifiedName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +93,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var locationArray = arrayOf(firstLatLng, secondLatLng)
 
         if (!checkLocationPermission()) {
-            Log.d(TAG, "Permissions for location are denied")
+            Log.d(tag, "Permissions for location are denied")
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode
@@ -112,7 +112,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 locationArray += LatLng(location.latitude, location.longitude)
 
                 Log.d(
-                    TAG, "Current location: Latitude = ${currentLocation.latitude}, " +
+                    tag, "Current location: Latitude = ${currentLocation.latitude}, " +
                             "Longitude = ${currentLocation.longitude}"
                 )
                 val message = getString(R.string.current_location_latitude_dialog_message) +
@@ -121,7 +121,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         "${currentLocation.longitude}"
                 showDialogAndToastForLocations(locationArray, message)
             } else {
-                Log.d(TAG, "No current location found!")
+                Log.d(tag, "No current location found!")
                 showDialogAndToastForLocations(locationArray,
                     getString(R.string.no_current_location_found_dialog_message))
 
@@ -164,7 +164,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         distanceCheckedItem[1] = false
         distanceCheckedItem[2] = false
         val builder = AlertDialog.Builder(this)
-        val map = mutableMapOf<String, Boolean>(
+        val map = mutableMapOf(
             distanceChoice[0] to distanceCheckedItem[0],
             distanceChoice[1] to distanceCheckedItem[1],
             distanceChoice[2] to distanceCheckedItem[2]
@@ -192,7 +192,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val message = StringBuilder()
 
         if(latLngArr.size == 3) {
-            Log.d(TAG, "3 locations are found")
+            Log.d(tag, "3 locations are found")
             if (map.keys.contains(getString(R.string.first_and_my_place))
                 && map.getValue(getString(R.string.first_and_my_place))) {
                 addDistanceMessage(message, firstPlaceName, getString(R.string.your_location),
@@ -230,7 +230,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         message.append(
             buildMessage(distanceFirstSecondPlace, firstPlaceString, secondPlaceString)
         ).append("\n")
-        Log.d(TAG, "Distance from First to my place = $distanceFirstSecondPlace")
+        Log.d(tag, "Distance from First to my place = $distanceFirstSecondPlace")
     }
 
     private fun buildMessage(distance: Float, firstDistancePlace: String, secondDistancePlace: String): String {

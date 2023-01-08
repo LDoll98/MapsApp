@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">MapsApp</string>
     <string-array name="city_names">
+        <item>Select item</item>
+        <item>Clear</item>
         <item>New York</item>
         <item>London</item>
         <item>Sydney</item>

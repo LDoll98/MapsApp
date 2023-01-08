@@ -3,12 +3,9 @@ package de.hhn.ws2022.ai.mapsapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 
 class LocationActivity : AppCompatActivity(), View.OnClickListener,
@@ -21,9 +18,8 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var secondPlaceLongitude: EditText
 
     private lateinit var startMapButton: Button
-    private lateinit var showMyLocationButton: Button
 
-    private val permissionCode = 101
+    private lateinit var spinner: Spinner
     private var permissionWasDenied = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +37,7 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
 
         permissionWasDenied = intent.getBooleanExtra("permissionWasDenied", false)
 
-        val spinner: Spinner = findViewById(R.id.spinner)
+        spinner = findViewById(R.id.spinner)
         spinner.onItemSelectedListener = this
         ArrayAdapter.createFromResource(this, R.array.city_names,
             android.R.layout.simple_spinner_dropdown_item).also { adapterItem ->
@@ -94,12 +90,55 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
-    override fun onClick(p0: View?) {
-    }
+    override fun onClick(p0: View?) {}
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        Log.d("LocationActivity", " Selected item: ${p0!!.adapter.getItem(p2)}")
+        when (p0.adapter.getItem(p2)) {
+            "New York" -> fillInPlace("New York", "40.730610", "-73.935242")
+            "Sydney" -> fillInPlace("Sydney", "-33.865143", "151.209900")
+            "London" -> fillInPlace("London", "51.509865", "-0.118092")
+            "Clear" -> clearInputFields()
+        }
     }
 
-    override fun onNothingSelected(p0: AdapterView<*>?) {
+    private fun clearInputFields() {
+        firstPlaceCity.text.clear()
+        firstPlaceLatitude.text.clear()
+        firstPlaceLongitude.text.clear()
+
+        secondPlaceCity.text.clear()
+        secondPlaceLatitude.text.clear()
+        secondPlaceLongitude.text.clear()
     }
+
+    private fun fillInPlace(cityName: String, latitude: String, longitude: String) {
+        if (firstPlaceCity.text.isEmpty() && firstPlaceLatitude.text.isEmpty()
+            && firstPlaceLongitude.text.isEmpty()) {
+            if(cityName != secondPlaceCity.text.toString()) {
+                firstPlaceCity.setText(cityName)
+                firstPlaceLatitude.setText(latitude)
+                firstPlaceLongitude.setText(longitude)
+            } else {
+                Toast.makeText(
+                    this, "You have that city already place pick another one", Toast.LENGTH_LONG).show()
+            }
+        }
+        else if (secondPlaceCity.text.isEmpty() && secondPlaceLatitude.text.isEmpty()
+            && secondPlaceLongitude.text.isEmpty()) {
+            if(cityName != firstPlaceCity.text.toString()) {
+                secondPlaceCity.setText(cityName)
+                secondPlaceLatitude.setText(latitude)
+                secondPlaceLongitude.setText(longitude)
+            } else {
+                Toast.makeText(
+                    this, "You have that city already place pick another one", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(
+                this, "There is no free input field", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
 }

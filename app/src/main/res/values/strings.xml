@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">MapsApp</string>
+    <string-array name="city_names">
+        <item>New York</item>
+        <item>London</item>
+        <item>Sydney</item>
+    </string-array>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_for_locations">Type in the Latitude and Longitude of two locations and find out the distance between them</string>
     <string name="first_place_label">First Place</string>

@@ -4,11 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 
-class LocationActivity : AppCompatActivity(), View.OnClickListener {
+class LocationActivity : AppCompatActivity(), View.OnClickListener,
+    AdapterView.OnItemSelectedListener {
     private lateinit var firstPlaceCity: EditText
     private lateinit var firstPlaceLatitude: EditText
     private lateinit var firstPlaceLongitude: EditText
@@ -34,29 +38,22 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener {
         secondPlaceLongitude = findViewById(R.id.secondPlaceLongitudeEditText)
 
         startMapButton = findViewById(R.id.startMapButton)
-        showMyLocationButton = findViewById(R.id.showMyLocationButton)
 
         permissionWasDenied = intent.getBooleanExtra("permissionWasDenied", false)
+
+        val spinner: Spinner = findViewById(R.id.spinner)
+        spinner.onItemSelectedListener = this
+        ArrayAdapter.createFromResource(this, R.array.city_names,
+            android.R.layout.simple_spinner_dropdown_item).also { adapterItem ->
+            adapterItem.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapterItem
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        // Add On
-        // Add more than two places -> distance have to be chooseable
-        // Show current location always
-        // Go back from MapsActivity to LocationActivity
-        // Show distance in MapsActivity after dialog
-        // Provide a list with famous places by name
-
-        var showMyLocationFlag = false
-        showMyLocationButton.setOnClickListener {
-            showMyLocationFlag = true
-            val intent = Intent(this, MapsActivity::class.java).apply {
-                putExtra("showMyLocationFlag", showMyLocationFlag)
-            }
-            startActivity(intent)
-        }
+        val showMyLocationFlag = false
 
         startMapButton.setOnClickListener {
             val firstPlaceCityString = firstPlaceCity.text.toString()
@@ -98,6 +95,11 @@ class LocationActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-        TODO("Not yet implemented")
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
     }
 }

@@ -13,9 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:layout_weight="1"
         android:background="#3700BCD4"
         android:gravity="center"
-        android:padding="10dp"
+        android:padding="5dp"
         android:text="@string/title_for_locations"
         android:textAlignment="center"
         android:textSize="24sp" />
@@ -25,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:layout_weight="1"
         android:background="#3700BCD4"
         android:orientation="vertical"
         android:paddingTop="10dp"
@@ -49,7 +51,7 @@
             android:id="@+id/LongLatLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -100,6 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:layout_weight="1"
         android:background="#3700BCD4"
         android:orientation="vertical"
         android:paddingTop="10dp"
@@ -124,7 +127,7 @@
             android:id="@+id/LongLatLabelSecondPlace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -175,6 +178,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button
@@ -187,12 +191,11 @@
 
         <Spinner
             android:id="@+id/spinner"
-            android:spinnerMode="dropdown"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            />
+            android:spinnerMode="dropdown" />
 
     </LinearLayout>
 

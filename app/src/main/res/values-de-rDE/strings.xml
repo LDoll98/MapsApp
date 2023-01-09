@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MapsApp</string>
+    <string-array name="city_names">
+        <item>Wähle Stadt aus</item>
+        <item>Löschen</item>
+        <item>New York</item>
+        <item>London</item>
+        <item>Sydney</item>
+        <item>Berlin</item>
+        <item>Moscow</item>
+        <item>Shanghai</item>
+        <item>Tokyo</item>
+    </string-array>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_for_locations">Geben Sie den Breiten- und Längengrad von zwei Orten ein und ermitteln Sie die Entfernung zwischen ihnen</string>
+    <string name="first_place_label">Erster Ort</string>
+    <string name="hint_for_city_input">Stadt, Land</string>
+    <string name="latitude_label">Breitengrad</string>
+    <string name="longitude_label">Längengrad</string>
+    <string name="empty_string">" "</string>
+    <string name="second_place_label">Zweiter Ort</string>
+    <string name="start_map_label">Map starten</string>
+    <string name="ok_dialog_distance">OK</string>
+    <string name="wrong_number_format_for_lat_lng">Bitte geben Sie gültige Breiten- und Längenwerte ein. Beispiel: Breitengrad = 0,0 und Längengrad = 0,0</string>
+    <string name="dialog_message_part_1">Die Entfernung zwischen</string>
+    <string name="dialog_message_and">und</string>
+    <string name="dialog_message_is">ist</string>
+    <string name="show_my_location_label">Mein Standort</string>
+    <string name="distance_dialog_label">Entfernung</string>
+    <string name="no_permission_for_location_dialog_label">Keine Berechtigung</string>
+    <string name="no_permission_for_location_dialog_message">Berechtigungen für den Standort wurden verweigert, für diese Aktion ist jedoch eine Genehmigung erforderlich</string>
+    <string name="current_location_dialog_label">Aktuelle Position</string>
+    <string name="current_location_latitude_dialog_message">"Deine aktuelle Position. Breitengrad ist "</string>
+    <string name="current_location_longitude_dialog_message">"und Längengrad ist "</string>
+    <string name="no_current_location_found_dialog_label">Keine aktuelle Position</string>
+    <string name="no_current_location_found_dialog_message">Es wurde kein aktueller Standort gefunden. Bitte überprüfen Sie Ihre Berechtigungen.</string>
+    <string name="your_location">Deine Position</string>
+    <string name="choose_distance_dialog_title">Welche Distanz möchtest du wissen?\nWählen Sie den Abstand zwischen</string>
+    <string name="first_and_second_place">erstem und zweitem Ort</string>
+    <string name="first_and_my_place">" erstem Ort und meiner position"</string>
+    <string name="second_and_my_place">" zweitem Ort und meiner positon"</string>
+    <string name="distance_dialog_title">Entfernungen</string>
+    <string name="show_map_dialog">ZEIGE MAP</string>
+    <string name="toast_same_input">Sie haben diese Stadt bereits platziert, wählen Sie eine andere</string>
+    <string name="toast_no_free_input">Kein freies Eingabefeld</string>
+    <string name="dialog_wrong_input">Bitte geben Sie gültige Ziffern ein.\nBreitengrad zwischen -90,0 und 90,00.\nLängengrad zwischen -180,0 und 180,0</string>
+    <string name="dialog_wrong_input_label">Fehlerhafte Eingabe</string>
+</resources>
